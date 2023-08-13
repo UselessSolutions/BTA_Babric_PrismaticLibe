@@ -1,15 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
-  "version": "${version}",
+  "id": "spawneggs",
+  "version": "1.0.0",
 
-  "name": "Example Mod",
-  "description": "This mod aims to help new BTA modders.",
+  "name": "Spawn Eggs",
+  "description": "This mod backports spawn eggs to BTA.",
   "authors": [
-    "Turnip Labs"
+    "Useless"
   ],
+  "icon": "icon.png",
   "contact": {
-    "homepage": "",
+    "homepage": "https://github.com/UselessBullets?tab=repositories",
     "sources": ""
   },
 
@@ -18,11 +19,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-        "turniplabs.examplemod.ExampleMod"
+        "useless.spawneggs.SpawnEggsMod"
     ]
   },
   "mixins": [
-      "examplemod.mixins.json"
+      "spawneggs.mixins.json"
   ],
 
   "depends": {
