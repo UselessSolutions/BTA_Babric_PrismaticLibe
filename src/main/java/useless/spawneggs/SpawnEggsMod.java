@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import turniplabs.halplibe.helper.ItemHelper;
+import turniplabs.halplibe.helper.TextureHelper;
 
 
 public class SpawnEggsMod implements ModInitializer {
@@ -20,6 +21,8 @@ public class SpawnEggsMod implements ModInitializer {
     public static final String MOD_ID = "spawneggs";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    public static final int[] baseEgg = TextureHelper.registerItemTexture(SpawnEggsMod.MOD_ID, "baseEgg.png");
+    public static final int[] overlayEgg = TextureHelper.registerItemTexture(SpawnEggsMod.MOD_ID, "overlayEgg.png");
     public static Item spawnEggChicken;
     public static Item spawnEggCow;
     public static Item spawnEggCreeper;
@@ -47,25 +50,63 @@ public class SpawnEggsMod implements ModInitializer {
         int arrayPos = 0;
         String[] entities = new String[] {"Chicken", "Cow", "Creeper", "Ghast", "Pig", "Sheep", "Skeleton", "Slime", "Spider", "Squid", "Wolf", "Zombie", "Scorpion", "Snowman", "PigZombie", "ArmouredZombie", "Monster", "Giant", "FireflyCluster"};
 
-        spawnEggChicken = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggCow = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggCreeper = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggGhast = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggPig = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggSheep = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggSkeleton = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggSlime = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggSpider = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggSquid = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggWolf = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggZombie = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggScorpion = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggSnowman = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggPigZombie = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggArmouredZombie = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos].toLowerCase(), "spawnEgg" + entities[arrayPos++] + ".png");
-        spawnEggMonster = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
-        spawnEggGiant = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
-        spawnEggFireflyCluster = ItemHelper.createItem(MOD_ID, new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos]), "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggChicken = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0XA1A1A1, 0XFF0000),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggCow = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0X443626, 0XA1A1A1),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggCreeper = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0X0DA70B, 0X000000),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggGhast = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0xF9F9F9, 0xBCBCBC),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggPig = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0xF0A5A2, 0xDB635F),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggSheep = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0xE7E7E7,0xFFB5B5),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggSkeleton = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0xC1C1C1, 0x494949),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggSlime = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x51A03E, 0x7EBF6E),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggSpider = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x342D27, 0xA80E0E),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggSquid = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x223B4D, 0x708899),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggWolf = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0xD7D3D3, 0xCEAF96),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggZombie = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x00AFAF, 0x799C65),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggScorpion = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x686342, 0xc0b969),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggSnowman = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x0f6496, 0xd3d3d3),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggPigZombie = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0xEA9393, 0x4C7129),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggArmouredZombie = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x735300, 0x799C65),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggMonster = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x4639a4, 0x00AFAF),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggGiant = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos],0x009F9F, 0x496C35),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
+        spawnEggFireflyCluster = ItemHelper.createItem(MOD_ID,
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x000000, 0xFFFF00),
+                "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
 
 
         LOGGER.info("SpawnEggsMod initialized.");

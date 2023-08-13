@@ -13,16 +13,28 @@ import net.minecraft.core.net.command.commands.SummonCommand;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
 
+import turniplabs.halplibe.helper.TextureHelper;
+
 import java.util.Set;
 
-public class ItemSpawnEgg extends Item {
-    public int colorBase;
-    public int colorOverlay;
+public class ItemSpawnEgg extends Item implements IColored{
+    private int colorBase;
+    private int colorOverlay;
+
     String entityName;
+    public ItemSpawnEgg(String name, int id, String entityName, int colorBase, int colorOverlay) {
+        super(name, id);
+        this.entityName = entityName;
+        this.colorBase = colorBase;
+        this.colorOverlay = colorOverlay;
+    }
     public ItemSpawnEgg(String name, int id, String entityName) {
         super(name, id);
         this.entityName = entityName;
+        this.colorBase = 0XFFFFFF;
+        this.colorOverlay = 0XFFFFFF;
     }
+
     public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int blockX, int blockY, int blockZ, Side side, double xPlaced, double yPlaced) {
         itemstack.consumeItem(entityplayer);
         if (!world.isClientSide) {
@@ -49,5 +61,25 @@ public class ItemSpawnEgg extends Item {
         } catch (Exception e) {
             throw new CommandError("Could not create Entity!");
         }
+    }
+
+    @Override
+    public int baseColor() {
+        return colorBase;
+    }
+
+    @Override
+    public int overlayColor() {
+        return colorOverlay;
+    }
+
+    @Override
+    public int[] baseTexture() {
+        return SpawnEggsMod.baseEgg;
+    }
+
+    @Override
+    public int[] overlayTexture() {
+        return SpawnEggsMod.overlayEgg;
     }
 }

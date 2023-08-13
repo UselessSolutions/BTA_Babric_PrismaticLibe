@@ -4,6 +4,8 @@
     "package": "useless.spawneggs.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
+        "mixinItemEntityRenderer",
+        "mixinItemRenderer"
     ],
     "client": [
     ],
