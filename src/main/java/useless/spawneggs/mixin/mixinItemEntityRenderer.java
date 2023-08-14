@@ -37,7 +37,11 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
     public void doRender(EntityItem entity, double d, double e, double f, float g, float h) {
 
     }
-    @Shadow
+    /**
+     * @author Useless
+     * @reason Colored Item rendering functionality
+     */
+    @Overwrite
     public void doRenderItem(EntityItem entity, double d, double d1, double d2, float f, float f1) {
         this.random.setSeed(187L);
         ItemStack itemstack = entity.item;
@@ -82,7 +86,8 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
                 this.renderBlocks.renderBlockOnInventory(Block.blocksList[itemstack.itemID], itemstack.getMetadata(), f4);
                 GL11.glPopMatrix();
             }
-        } else {
+        }
+        else if (itemstack.getItem() instanceof IColored){
             int tileWidth;
             GL11.glScalef(0.5f, 0.5f, 0.5f);
             int i = itemstack.getIconIndex();
@@ -90,7 +95,113 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
                 this.loadTexture("/terrain.png");
                 tileWidth = TextureFX.tileWidthTerrain;
             } else {
+                this.loadTexture("/gui/items.png"); //
+                tileWidth = TextureFX.tileWidthItems;
+            }
+            Tessellator tessellator = Tessellator.instance;
+            if (this.field_27004_a) {
+                int k = Item.itemsList[itemstack.itemID].getColorFromDamage(itemstack.getMetadata());
+                float f15 = (float)(k >> 16 & 0xFF) / 255.0f;
+                float f17 = (float)(k >> 8 & 0xFF) / 255.0f;
+                float f19 = (float)(k & 0xFF) / 255.0f;
+                float f21 = entity.getBrightness(f1);
+                if (Minecraft.getMinecraft((Object)this).fullbright || entity.item.getItem().hasTag(ItemTags.renderFullbright)) {
+                    f21 = 1.0f;
+                }
+                GL11.glColor4f(f15 * f21, f17 * f21, f19 * f21, 1.0f);
+            }
+            if (((Boolean)Minecraft.getMinecraft((Object)this).gameSettings.items3D.value).booleanValue()) {
+                GL11.glPushMatrix();
+                GL11.glScaled(1.0, 1.0, 1.0);
+                GL11.glRotated(f3, 0.0, 1.0, 0.0);
+                GL11.glTranslated(-0.5, 0.0, -0.05 * (double)(renderCount - 1));
+                for (int j = 0; j < renderCount; ++j) {
+                    GL11.glPushMatrix();
+                    GL11.glTranslated(0.0, 0.0, 0.1 * (double)j);
+                    EntityRenderDispatcher.instance.itemRenderer.renderItem(entity, itemstack, false);
+                    GL11.glPopMatrix();
+                }
+                GL11.glPopMatrix();
+            } else {
+                IColored coloredItem = (IColored)item;
+                int baseTextureIndex = Item.iconCoordToIndex(coloredItem.baseTexture()[0],(coloredItem.baseTexture()[1]));
+                int baseColor = coloredItem.baseColor();
+                float[] baseColorRGB = new float[] {(float)(baseColor >> 16 & 0xFF) / 255.0f, (float)(baseColor >> 8 & 0xFF) / 255.0f, (float)(baseColor & 0xFF) / 255.0f};
+                int overlayTextureIndex = Item.iconCoordToIndex(coloredItem.overlayTexture()[0],(coloredItem.overlayTexture()[1]));
+                int overlayColor = coloredItem.overlayColor();
+                float[] overlayColorRGB = new float[] {(float)(overlayColor >> 16 & 0xFF) / 255.0f, (float)(overlayColor >> 8 & 0xFF) / 255.0f, (float)(overlayColor & 0xFF) / 255.0f};
+
+                float b1 = (float)(baseTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+                float b2 = (float)(baseTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+                float b3 = (float)(baseTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+                float b4 = (float)(baseTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+                float o1 = (float)(overlayTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+                float o2 = (float)(overlayTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+                float o3 = (float)(overlayTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+                float o4 = (float)(overlayTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+                float brightness = 1.0f;
+                if (this.field_27004_a) {
+                    int k = Item.itemsList[itemstack.itemID].getColorFromDamage(itemstack.getMetadata());
+                    float f15 = (float)(k >> 16 & 0xFF) / 255.0f;
+                    float f17 = (float)(k >> 8 & 0xFF) / 255.0f;
+                    float f19 = (float)(k & 0xFF) / 255.0f;
+                    brightness = entity.getBrightness(f1);
+                    if (Minecraft.getMinecraft((Object)this).fullbright || entity.item.getItem().hasTag(ItemTags.renderFullbright)) {
+                        brightness = 1.0f;
+                    }
+                    GL11.glColor4f(f15 * brightness, f17 * brightness, f19 * brightness, 1.0f);
+                }
+                for (int l = 0; l < renderCount; ++l) {
+
+                    GL11.glPushMatrix();
+                    if (l > 0) {
+                        float f16 = (this.random.nextFloat() * 2.0f - 1.0f) * 0.3f;
+                        float f18 = (this.random.nextFloat() * 2.0f - 1.0f) * 0.3f;
+                        float f20 = (this.random.nextFloat() * 2.0f - 1.0f) * 0.3f;
+                        GL11.glTranslatef(f16, f18, f20);
+                    }
+                    GL11.glRotatef(180.0f - this.renderDispatcher.viewLerpYaw, 0.0f, 1.0f, 0.0f);
+
+                    tessellator.startDrawingQuads();
+                    tessellator.setNormal(0.0f, 1.0f, 0.0f);
+                    tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
+                    tessellator.addVertexWithUV(-0.5, -0.25, 0.0, b1, b4);
+                    tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
+                    tessellator.addVertexWithUV(0.5, -0.25, 0.0, b2, b4);
+                    tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
+                    tessellator.addVertexWithUV(0.5, 0.75, 0.0, b2, b3);
+                    tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
+                    tessellator.addVertexWithUV(-0.5, 0.75, 0.0, b1, b3);
+                    tessellator.draw();
+
+                    tessellator.startDrawingQuads();
+                    tessellator.setNormal(0.0f, 1.0f, 0.0f);
+                    tessellator.setColorOpaque_F(overlayColorRGB[0] * brightness, overlayColorRGB[1] * brightness, overlayColorRGB[2] * brightness);
+                    tessellator.addVertexWithUV(-0.5, -0.25, 0.0, o1, o4);
+                    tessellator.setColorOpaque_F(overlayColorRGB[0] * brightness, overlayColorRGB[1] * brightness, overlayColorRGB[2] * brightness);
+                    tessellator.addVertexWithUV(0.5, -0.25, 0.0, o2, o4);
+                    tessellator.setColorOpaque_F(overlayColorRGB[0] * brightness, overlayColorRGB[1] * brightness, overlayColorRGB[2] * brightness);
+                    tessellator.addVertexWithUV(0.5, 0.75, 0.0, o2, o3);
+                    tessellator.setColorOpaque_F(overlayColorRGB[0] * brightness, overlayColorRGB[1] * brightness, overlayColorRGB[2] * brightness);
+                    tessellator.addVertexWithUV(-0.5, 0.75, 0.0, o1, o3);
+                    tessellator.draw();
+
+                    GL11.glPopMatrix();
+                }
+            }
+
+
+
+        }
+        else {
+            int tileWidth;
+            GL11.glScalef(0.5f, 0.5f, 0.5f);
+            int i = itemstack.getIconIndex();
+            if (itemstack.itemID < Block.blocksList.length) {
                 this.loadTexture("/terrain.png");
+                tileWidth = TextureFX.tileWidthTerrain;
+            } else {
+                this.loadTexture("/gui/items.png"); //
                 tileWidth = TextureFX.tileWidthItems;
             }
             Tessellator tessellator = Tessellator.instance;
@@ -148,6 +259,7 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
         GL11.glDisable(32826);
         GL11.glPopMatrix();
     }
+
     /**
      * @author Useless
      * @reason Multilayered item rendering

@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import useless.spawneggs.IColored;
 
 @Mixin(value = ItemRenderer.class, remap = false)
@@ -77,6 +78,7 @@ public class mixinItemRenderer {
         GL11.glPopMatrix();
     }
 
+    @Unique
     public void renderItemHand(Entity entity, ItemStack itemstack, boolean handheldTransform, int tileWidth){
         Tessellator tessellator = Tessellator.instance;
         int i = itemstack.getItem().getIconIndex(itemstack); // Specified texture
@@ -169,6 +171,7 @@ public class mixinItemRenderer {
         GL11.glDisable(32826);
     }
 
+    @Unique
     public void renderColoredItemHand(Entity entity, ItemStack itemstack, boolean handheldTransform, int tileWidth){
         Tessellator tessellator = Tessellator.instance;
         IColored coloredItem = (IColored) itemstack.getItem();
@@ -179,15 +182,13 @@ public class mixinItemRenderer {
         int overlayColor = coloredItem.overlayColor();
 
 
-/*        if (entity instanceof EntityLiving) {
-            baseTextureIndex = ((EntityLiving)entity).getItemIcon(itemstack);
-        }*/
         // UV coordinates
         renderModel(tessellator, tileWidth, baseTextureIndex, baseColor, handheldTransform);
         renderModel(tessellator, tileWidth, overlayTextureIndex, overlayColor, false);
         GL11.glDisable(32826);
     }
 
+    @Unique
     public void renderModel(Tessellator tessellator, int tileWidth, int textureIndex, int color, boolean handheldTransform){
         float red = (float)(color >> 16 & 0xFF) / 255.0f;
         float green = (float)(color >> 8 & 0xFF) / 255.0f;
