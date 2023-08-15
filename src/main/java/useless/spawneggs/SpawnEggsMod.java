@@ -87,7 +87,7 @@ public class SpawnEggsMod implements ModInitializer {
                 new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x00AFAF, 0x799C65),
                 "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
         spawnEggScorpion = ItemHelper.createItem(MOD_ID,
-                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x686342, 0xc0b969),
+                new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x888362, 0xE0D989),
                 "item.spawn.egg." + entities[arrayPos++].toLowerCase(), "spawnEggDefault.png");
         spawnEggSnowman = ItemHelper.createItem(MOD_ID,
                 new ItemSpawnEgg("spawn.egg." + entities[arrayPos].toLowerCase(), num++, entities[arrayPos], 0x0f6496, 0xd3d3d3),
