@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "spawneggs",
+  "id": "prismaticlibe",
   "version": "1.0.0",
 
-  "name": "Spawn Eggs",
-  "description": "This mod backports spawn eggs to BTA.",
+  "name": "Prismatic Library",
+  "description": "Colored item functionality for other mods.",
   "authors": [
     "Useless"
   ],
@@ -19,11 +19,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-        "useless.spawneggs.SpawnEggsMod"
+        "useless.prismaticlibe.PrismaticLibe"
     ]
   },
   "mixins": [
-      "spawneggs.mixins.json"
+    "prismaticlibe.mixins.json"
   ],
 
   "depends": {

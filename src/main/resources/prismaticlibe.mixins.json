@@ -1,0 +1,15 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "useless.prismaticlibe.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+        "mixinItemEntityRenderer",
+        "mixinItemRenderer"
+    ],
+    "client": [
+    ],
+    "injectors": {
+        "defaultRequire": 1
+  }
+}
