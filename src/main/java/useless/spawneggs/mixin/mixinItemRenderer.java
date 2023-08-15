@@ -1,20 +1,16 @@
 package useless.spawneggs.mixin;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiRenderItem;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.model.BlockModel;
 import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
-import net.minecraft.client.render.entity.ItemEntityRenderer;
 import net.minecraft.core.Global;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.EntityLiving;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
-import net.minecraft.core.player.inventory.slot.Slot;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -27,20 +23,12 @@ public class mixinItemRenderer {
     @Shadow
     private Minecraft mc;
     @Shadow
-    private ItemStack itemToRender = null;
-    @Shadow
-    private float equippedProgress = 0.0f;
-    @Shadow
-    private float prevEquippedProgress = 0.0f;
-    @Shadow
     private RenderBlocks renderBlocksInstance = new RenderBlocks();
-    @Shadow
-    private MapItemRenderer renderMapInstance;
-    @Shadow
-    private int field_20099_f = -1;
+
+
     /**
-     * @author
-     * @reason
+     * @author Useless
+     * @reason Layered Colored Item Rendering
      */
     @Overwrite
     public void renderItem(Entity entity, ItemStack itemstack, boolean handheldTransform) {

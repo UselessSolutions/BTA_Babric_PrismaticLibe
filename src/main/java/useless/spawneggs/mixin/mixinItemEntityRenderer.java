@@ -16,9 +16,6 @@ import net.minecraft.core.item.tag.ItemTags;
 import net.minecraft.core.util.helper.MathHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import useless.spawneggs.IColored;
 
 import java.util.Random;
@@ -64,11 +61,11 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
         }
         GL11.glTranslatef((float)d, (float)d1 + f2, (float)d2);
         GL11.glEnable(32826);
-        if (itemstack.itemID < Block.blocksList.length && Block.blocksList[itemstack.itemID] != null && ((BlockModel) BlockModelDispatcher.getInstance().getDispatch(Block.blocksList[itemstack.itemID])).shouldItemRender3d()) {
+        if (itemstack.itemID < Block.blocksList.length && Block.blocksList[itemstack.itemID] != null && BlockModelDispatcher.getInstance().getDispatch(Block.blocksList[itemstack.itemID]).shouldItemRender3d()) {
             GL11.glRotatef(f3, 0.0f, 1.0f, 0.0f);
             this.loadTexture("/terrain.png");
             BlockModelRenderBlocks.setRenderBlocks(this.renderBlocks);
-            BlockModel model = (BlockModel)BlockModelDispatcher.getInstance().getDispatch(Block.blocksList[itemstack.itemID]);
+            BlockModel model = BlockModelDispatcher.getInstance().getDispatch(Block.blocksList[itemstack.itemID]);
             float itemSize = model.getItemRenderScale();
             GL11.glScalef(itemSize, itemSize, itemSize);
             for (int j = 0; j < renderCount; ++j) {
@@ -80,7 +77,7 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
                     GL11.glTranslatef(f5, f7, f9);
                 }
                 float f4 = entity.getBrightness(f1);
-                if (Minecraft.getMinecraft((Object)this).fullbright) {
+                if (Minecraft.getMinecraft(this).fullbright) {
                     f4 = 1.0f;
                 }
                 this.renderBlocks.renderBlockOnInventory(Block.blocksList[itemstack.itemID], itemstack.getMetadata(), f4);
@@ -90,7 +87,6 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
         else if (itemstack.getItem() instanceof IColored){
             int tileWidth;
             GL11.glScalef(0.5f, 0.5f, 0.5f);
-            int i = itemstack.getIconIndex();
             if (itemstack.itemID < Block.blocksList.length) {
                 this.loadTexture("/terrain.png");
                 tileWidth = TextureFX.tileWidthTerrain;
@@ -105,12 +101,12 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
                 float f17 = (float)(k >> 8 & 0xFF) / 255.0f;
                 float f19 = (float)(k & 0xFF) / 255.0f;
                 float f21 = entity.getBrightness(f1);
-                if (Minecraft.getMinecraft((Object)this).fullbright || entity.item.getItem().hasTag(ItemTags.renderFullbright)) {
+                if (Minecraft.getMinecraft(this).fullbright || entity.item.getItem().hasTag(ItemTags.renderFullbright)) {
                     f21 = 1.0f;
                 }
                 GL11.glColor4f(f15 * f21, f17 * f21, f19 * f21, 1.0f);
             }
-            if (((Boolean)Minecraft.getMinecraft((Object)this).gameSettings.items3D.value).booleanValue()) {
+            if (Minecraft.getMinecraft(this).gameSettings.items3D.value) {
                 GL11.glPushMatrix();
                 GL11.glScaled(1.0, 1.0, 1.0);
                 GL11.glRotated(f3, 0.0, 1.0, 0.0);
@@ -126,19 +122,10 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
                 IColored coloredItem = (IColored)item;
                 int baseTextureIndex = Item.iconCoordToIndex(coloredItem.baseTexture()[0],(coloredItem.baseTexture()[1]));
                 int baseColor = coloredItem.baseColor();
-                float[] baseColorRGB = new float[] {(float)(baseColor >> 16 & 0xFF) / 255.0f, (float)(baseColor >> 8 & 0xFF) / 255.0f, (float)(baseColor & 0xFF) / 255.0f};
+
                 int overlayTextureIndex = Item.iconCoordToIndex(coloredItem.overlayTexture()[0],(coloredItem.overlayTexture()[1]));
                 int overlayColor = coloredItem.overlayColor();
-                float[] overlayColorRGB = new float[] {(float)(overlayColor >> 16 & 0xFF) / 255.0f, (float)(overlayColor >> 8 & 0xFF) / 255.0f, (float)(overlayColor & 0xFF) / 255.0f};
 
-                float b1 = (float)(baseTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-                float b2 = (float)(baseTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-                float b3 = (float)(baseTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-                float b4 = (float)(baseTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-                float o1 = (float)(overlayTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-                float o2 = (float)(overlayTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-                float o3 = (float)(overlayTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-                float o4 = (float)(overlayTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
                 float brightness = 1.0f;
                 if (this.field_27004_a) {
                     int k = Item.itemsList[itemstack.itemID].getColorFromDamage(itemstack.getMetadata());
@@ -146,7 +133,7 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
                     float f17 = (float)(k >> 8 & 0xFF) / 255.0f;
                     float f19 = (float)(k & 0xFF) / 255.0f;
                     brightness = entity.getBrightness(f1);
-                    if (Minecraft.getMinecraft((Object)this).fullbright || entity.item.getItem().hasTag(ItemTags.renderFullbright)) {
+                    if (Minecraft.getMinecraft(this).fullbright || entity.item.getItem().hasTag(ItemTags.renderFullbright)) {
                         brightness = 1.0f;
                     }
                     GL11.glColor4f(f15 * brightness, f17 * brightness, f19 * brightness, 1.0f);
@@ -162,36 +149,12 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
                     }
                     GL11.glRotatef(180.0f - this.renderDispatcher.viewLerpYaw, 0.0f, 1.0f, 0.0f);
 
-                    tessellator.startDrawingQuads();
-                    tessellator.setNormal(0.0f, 1.0f, 0.0f);
-                    tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
-                    tessellator.addVertexWithUV(-0.5, -0.25, 0.0, b1, b4);
-                    tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
-                    tessellator.addVertexWithUV(0.5, -0.25, 0.0, b2, b4);
-                    tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
-                    tessellator.addVertexWithUV(0.5, 0.75, 0.0, b2, b3);
-                    tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
-                    tessellator.addVertexWithUV(-0.5, 0.75, 0.0, b1, b3);
-                    tessellator.draw();
-
-                    tessellator.startDrawingQuads();
-                    tessellator.setNormal(0.0f, 1.0f, 0.0f);
-                    tessellator.setColorOpaque_F(overlayColorRGB[0] * brightness, overlayColorRGB[1] * brightness, overlayColorRGB[2] * brightness);
-                    tessellator.addVertexWithUV(-0.5, -0.25, 0.0, o1, o4);
-                    tessellator.setColorOpaque_F(overlayColorRGB[0] * brightness, overlayColorRGB[1] * brightness, overlayColorRGB[2] * brightness);
-                    tessellator.addVertexWithUV(0.5, -0.25, 0.0, o2, o4);
-                    tessellator.setColorOpaque_F(overlayColorRGB[0] * brightness, overlayColorRGB[1] * brightness, overlayColorRGB[2] * brightness);
-                    tessellator.addVertexWithUV(0.5, 0.75, 0.0, o2, o3);
-                    tessellator.setColorOpaque_F(overlayColorRGB[0] * brightness, overlayColorRGB[1] * brightness, overlayColorRGB[2] * brightness);
-                    tessellator.addVertexWithUV(-0.5, 0.75, 0.0, o1, o3);
-                    tessellator.draw();
+                    renderColorQuadSpace(tessellator, tileWidth, baseColor, brightness, baseTextureIndex);
+                    renderColorQuadSpace(tessellator, tileWidth, overlayColor, brightness, overlayTextureIndex);
 
                     GL11.glPopMatrix();
                 }
             }
-
-
-
         }
         else {
             int tileWidth;
@@ -205,25 +168,22 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
                 tileWidth = TextureFX.tileWidthItems;
             }
             Tessellator tessellator = Tessellator.instance;
-            float f6 = (float)(i % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+            float f6 = (float)(i % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
             float f8 = (float)(i % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-            float f10 = (float)(i / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+            float f10 = (float)(i / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
             float f11 = (float)(i / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-            float f12 = 1.0f;
-            float f13 = 0.5f;
-            float f14 = 0.25f;
             if (this.field_27004_a) {
                 int k = Item.itemsList[itemstack.itemID].getColorFromDamage(itemstack.getMetadata());
                 float f15 = (float)(k >> 16 & 0xFF) / 255.0f;
                 float f17 = (float)(k >> 8 & 0xFF) / 255.0f;
                 float f19 = (float)(k & 0xFF) / 255.0f;
                 float f21 = entity.getBrightness(f1);
-                if (Minecraft.getMinecraft((Object)this).fullbright || entity.item.getItem().hasTag(ItemTags.renderFullbright)) {
+                if (Minecraft.getMinecraft(this).fullbright || entity.item.getItem().hasTag(ItemTags.renderFullbright)) {
                     f21 = 1.0f;
                 }
                 GL11.glColor4f(f15 * f21, f17 * f21, f19 * f21, 1.0f);
             }
-            if (((Boolean)Minecraft.getMinecraft((Object)this).gameSettings.items3D.value).booleanValue()) {
+            if (Minecraft.getMinecraft(this).gameSettings.items3D.value) {
                 GL11.glPushMatrix();
                 GL11.glScaled(1.0, 1.0, 1.0);
                 GL11.glRotated(f3, 0.0, 1.0, 0.0);
@@ -260,6 +220,30 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
         GL11.glPopMatrix();
     }
 
+    @Unique
+    public void renderColorQuadSpace(Tessellator tessellator, int tileWidth, int color, float brightness, int textureIndex){
+
+        float b1 = (float)(textureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float b2 = (float)(textureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float b3 = (float)(textureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float b4 = (float)(textureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float[] baseColorRGB = new float[] {(float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f};
+
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0f, 1.0f, 0.0f);
+        tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
+        tessellator.addVertexWithUV(-0.5, -0.25, 0.0, b1, b4);
+        tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
+        tessellator.addVertexWithUV(0.5, -0.25, 0.0, b2, b4);
+        tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
+        tessellator.addVertexWithUV(0.5, 0.75, 0.0, b2, b3);
+        tessellator.setColorOpaque_F(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
+        tessellator.addVertexWithUV(-0.5, 0.75, 0.0, b1, b3);
+        tessellator.draw();
+    }
+
+
+
     /**
      * @author Useless
      * @reason Multilayered item rendering
@@ -280,7 +264,6 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
      * @author Useless
      * @reason Multilayered item rendering
      */
-    //@Inject(method = "renderItemIntoGUI(Lnet/minecraft/client/render/FontRenderer;Lnet/minecraft/client/render/RenderEngine;Lnet/minecraft/core/item/ItemStack;I I F F)V", at = @At("HEAD"))
     @Overwrite
     public void renderItemIntoGUI(FontRenderer fontrenderer, RenderEngine renderengine, ItemStack itemstack, int i, int j, float brightness, float alpha) {
         if (itemstack == null) {
@@ -295,9 +278,11 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
 
     @Unique
     public void drawColoredItemIntoGui(FontRenderer fontrenderer, RenderEngine renderengine, Item item, int j, int l, int i1, float brightness, float alpha) {
-        int baseTextureIndex = Item.iconCoordToIndex(((IColored)item).baseTexture()[0],((IColored)item).baseTexture()[1]);
-        int overlayTextureIndex = Item.iconCoordToIndex(((IColored)item).overlayTexture()[0],((IColored)item).overlayTexture()[1]);
-        if (item.id < Block.blocksList.length && ((BlockModel)BlockModelDispatcher.getInstance().getDispatch(Block.blocksList[item.id])).shouldItemRender3d()) {
+        IColored coloredItem = (IColored) item;
+        int baseTextureIndex = Item.iconCoordToIndex(coloredItem.baseTexture()[0], coloredItem.baseTexture()[1]);
+        int overlayTextureIndex = Item.iconCoordToIndex(coloredItem.overlayTexture()[0], coloredItem.overlayTexture()[1]);
+
+        if (item.id < Block.blocksList.length && BlockModelDispatcher.getInstance().getDispatch(Block.blocksList[item.id]).shouldItemRender3d()) {
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
             int j1 = item.id;
@@ -327,6 +312,7 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
             GL11.glDisable(3042);
         } else if (baseTextureIndex >= 0) {
             int tileWidth;
+
             GL11.glDisable(2896);
             if (item.id < Block.blocksList.length) {
                 renderengine.bindTexture(renderengine.getTexture("/terrain.png"));
@@ -344,8 +330,9 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
             } else {
                 GL11.glColor4f(brightness, brightness, brightness, alpha);
             }
-            this.renderColoredTexturedQuad(l, i1, baseTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, baseTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, tileWidth, tileWidth, ((IColored) item).baseColor());
-            this.renderColoredTexturedQuad(l, i1, overlayTextureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, overlayTextureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, tileWidth, tileWidth, ((IColored) item).overlayColor());
+
+            renderColoredQuadPlane(l, i1, baseTextureIndex, tileWidth, coloredItem.baseColor());
+            renderColoredQuadPlane(l, i1, overlayTextureIndex, tileWidth, coloredItem.overlayColor());
             GL11.glEnable(2896);
         }
         GL11.glEnable(2884);
@@ -356,12 +343,11 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
      */
     @Overwrite
     public void drawItemIntoGui(FontRenderer fontrenderer, RenderEngine renderengine, int i, int j, int k, int l, int i1, float brightness, float alpha) {
-        if (i < Block.blocksList.length && ((BlockModel)BlockModelDispatcher.getInstance().getDispatch(Block.blocksList[i])).shouldItemRender3d()) {
+        if (i < Block.blocksList.length && BlockModelDispatcher.getInstance().getDispatch(Block.blocksList[i]).shouldItemRender3d()) {
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
-            int j1 = i;
             renderengine.bindTexture(renderengine.getTexture("/terrain.png"));
-            Block block = Block.blocksList[j1];
+            Block block = Block.blocksList[i];
             GL11.glPushMatrix();
             GL11.glTranslatef(l - 2, i1 + 3, -3.0f);
             GL11.glScalef(10.0f, 10.0f, 10.0f);
@@ -410,36 +396,36 @@ public class mixinItemEntityRenderer extends EntityRenderer<EntityItem> {
     }
     @Shadow
     public void renderTexturedQuad(int x, int y, int tileX, int tileY, int tileWidth, int tileHeight) {
-        float f = 0.0f;
         float f1 = 1.0f / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
         float f2 = 1.0f / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileHeight);
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, y + 16, 0.0, (float)(tileX + 0) * f1, (float)(tileY + tileHeight) * f2);
-        tessellator.addVertexWithUV(x + 16, y + 16, 0.0, (float)(tileX + tileWidth) * f1, (float)(tileY + tileHeight) * f2);
-        tessellator.addVertexWithUV(x + 16, y + 0, 0.0, (float)(tileX + tileWidth) * f1, (float)(tileY + 0) * f2);
-        tessellator.addVertexWithUV(x + 0, y + 0, 0.0, (float)(tileX + 0) * f1, (float)(tileY + 0) * f2);
-        tessellator.draw();
-    }
-    @Unique
-    public void renderColoredTexturedQuad(int x, int y, int tileX, int tileY, int tileWidth, int tileHeight, int color) {
-        float f = 0.0f;
-        float f1 = 1.0f / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-        float f2 = 1.0f / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileHeight);
-        float red = (float)(color >> 16 & 0xFF) / 255.0f;
-        float green = (float)(color >> 8 & 0xFF) / 255.0f;
-        float blue = (float)(color & 0xFF) / 255.0f;
 
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.setColorOpaque_F(red , green , blue );
-        tessellator.addVertexWithUV(x + 0, y + 16, 0.0, (float)(tileX + 0) * f1, (float)(tileY + tileHeight) * f2);
-        tessellator.setColorOpaque_F(red , green , blue );
+        tessellator.addVertexWithUV(x, y + 16, 0.0, (float)(tileX) * f1, (float)(tileY + tileHeight) * f2);
         tessellator.addVertexWithUV(x + 16, y + 16, 0.0, (float)(tileX + tileWidth) * f1, (float)(tileY + tileHeight) * f2);
-        tessellator.setColorOpaque_F(red , green , blue );
-        tessellator.addVertexWithUV(x + 16, y + 0, 0.0, (float)(tileX + tileWidth) * f1, (float)(tileY + 0) * f2);
-        tessellator.setColorOpaque_F(red , green , blue );
-        tessellator.addVertexWithUV(x + 0, y + 0, 0.0, (float)(tileX + 0) * f1, (float)(tileY + 0) * f2);
+        tessellator.addVertexWithUV(x + 16, y, 0.0, (float)(tileX + tileWidth) * f1, (float)(tileY) * f2);
+        tessellator.addVertexWithUV(x, y, 0.0, (float)(tileX) * f1, (float)(tileY) * f2);
+        tessellator.draw();
+    }
+    @Unique
+    public void renderColoredQuadPlane(int x, int y, int textureIndex, int tileWidth, int color) {
+        int tileX = textureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth;
+        int tileY = textureIndex / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth;
+
+        float f1 = 1.0f / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f2 = 1.0f / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float[] baseColorRGB = new float[] {(float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f};
+
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.startDrawingQuads();
+        tessellator.setColorOpaque_F(baseColorRGB[0] , baseColorRGB[1] , baseColorRGB[2] );
+        tessellator.addVertexWithUV(x, y + 16, 0.0, (float)(tileX) * f1, (float)(tileY + tileWidth) * f2);
+        tessellator.setColorOpaque_F(baseColorRGB[0] , baseColorRGB[1] , baseColorRGB[2] );
+        tessellator.addVertexWithUV(x + 16, y + 16, 0.0, (float)(tileX + tileWidth) * f1, (float)(tileY + tileWidth) * f2);
+        tessellator.setColorOpaque_F(baseColorRGB[0] , baseColorRGB[1] , baseColorRGB[2] );
+        tessellator.addVertexWithUV(x + 16, y, 0.0, (float)(tileX + tileWidth) * f1, (float)(tileY) * f2);
+        tessellator.setColorOpaque_F(baseColorRGB[0] , baseColorRGB[1] , baseColorRGB[2] );
+        tessellator.addVertexWithUV(x, y, 0.0, (float)(tileX) * f1, (float)(tileY) * f2);
         tessellator.draw();
     }
 }
