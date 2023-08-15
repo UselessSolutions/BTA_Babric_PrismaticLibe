@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "prismaticlibe",
-  "version": "1.0.0",
+  "version": "1.0.2",
 
   "name": "Prismatic Library",
   "description": "Colored item functionality for other mods.",
