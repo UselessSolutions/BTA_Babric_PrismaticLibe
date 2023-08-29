@@ -4,6 +4,9 @@
     "package": "useless.prismaticlibe.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
+        "GuiItemDragHandlerMixin",
+        "GuiRenderItemMixin",
+        "MinecraftMixin",
         "mixinItemEntityRenderer",
         "mixinItemRenderer"
     ],
