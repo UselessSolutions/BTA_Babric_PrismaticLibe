@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "prismaticlibe",
-  "version": "1.0.2",
+  "version": "2.0.0",
 
   "name": "Prismatic Library",
-  "description": "Colored item functionality for other mods.",
+  "description": "Useless' item rendering and sound library.",
   "authors": [
     "Useless"
   ],
@@ -27,8 +27,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.13.3",
-    "halplibe": ">=2.1.1"
+    "fabricloader": ">=0.13.3"
   },
   "suggests": {
   }

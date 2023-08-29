@@ -3,7 +3,7 @@ package useless.prismaticlibe.helper;
 
 import com.b100.utils.FileUtils;
 import net.minecraft.client.Minecraft;
-import useless.legacyui.LegacyUI;
+import useless.prismaticlibe.PrismaticLibe;
 
 import java.io.*;
 import java.util.Hashtable;
@@ -20,7 +20,7 @@ public class SoundHelper {
 
     public SoundHelper(){
         mc = Minecraft.getMinecraft(this);
-        LegacyUI.LOGGER.info(soundDirectory.getAbsolutePath());
+        PrismaticLibe.LOGGER.info(soundDirectory.getAbsolutePath());
         soundHelper = this;
     }
     public static SoundHelper getInstance(){

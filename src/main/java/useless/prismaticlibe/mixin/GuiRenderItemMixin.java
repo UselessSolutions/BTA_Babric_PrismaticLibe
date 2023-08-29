@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import useless.prismaticlibe.gui.slot.IResizable;
-import useless.legacyui.Gui.Slot.SlotCraftingDisplay;
+import useless.prismaticlibe.gui.slot.SlotCraftingDisplay;
 
 @Mixin(value = GuiRenderItem.class, remap = false, priority = 0)
 public class GuiRenderItemMixin extends Gui {
