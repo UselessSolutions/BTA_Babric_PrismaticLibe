@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 // Fixes a startup class when using some custom classes
-@Mixin(value=Minecraft.class, remap=false)
+@Mixin(value=Minecraft.class, remap=false, priority = 42069000)
 public class MinecraftMixin {
     @Shadow
     private static Minecraft theMinecraft;
