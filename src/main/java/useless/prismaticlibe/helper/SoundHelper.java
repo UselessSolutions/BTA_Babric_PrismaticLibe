@@ -18,7 +18,7 @@ public class SoundHelper {
     public static final File musicDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\music");
     public static final File streamingDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\streaming");
     public static void addMusic(String MOD_ID, String soundSource){
-        String destination = ("\\" + soundSource.replace("/", "\\")).replace("\\\\", "\\");
+        String destination = musicDirectory + ("\\" + soundSource.replace("/", "\\")).replace("\\\\", "\\");
         String source = ("/assets/" + MOD_ID + "/music/" + soundSource).replace("//", "/").trim();
 
         PrismaticLibe.LOGGER.info(extract(source, destination, soundSource) + "Added to sound directory");
