@@ -21,15 +21,15 @@ public class SoundHelper {
         String destination = ("\\" + soundSource.replace("/", "\\")).replace("\\\\", "\\");
         String source = ("/assets/" + MOD_ID + "/music/" + soundSource).replace("//", "/").trim();
 
-        PrismaticLibe.LOGGER.info(extract(source, destination) + "Added to sound directory");
+        PrismaticLibe.LOGGER.info(extract(source, destination, soundSource) + "Added to sound directory");
     }
     public static void addSound(String MOD_ID, String soundSource){
         String destination = soundDirectory + ("\\" + MOD_ID + "\\").replace("\\\\", "\\");
         String source = ("/assets/" + MOD_ID + "/sound/" + soundSource).replace("//", "/").trim();
 
-        PrismaticLibe.LOGGER.info(extract(source, destination) + "Added to sound directory");
+        PrismaticLibe.LOGGER.info(extract(source, destination, soundSource) + "Added to sound directory");
     }
-    private static String extract(String jarFilePath, String destination){
+    private static String extract(String jarFilePath, String destination, String soundSource){
 
         if(jarFilePath == null)
             return null;
@@ -47,11 +47,7 @@ public class SoundHelper {
             if(fileStream == null)
                 return null;
 
-            // Grab the file name
-            String[] chopped = jarFilePath.split("\\/");
-            String fileName = chopped[chopped.length-1];
-
-            File tempFile = new File(new File(destination), fileName);
+            File tempFile = new File(new File(destination), soundSource);
             Files.createDirectories(Paths.get(destination));
             tempFile.delete();
             tempFile.createNewFile();
