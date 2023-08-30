@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import useless.prismaticlibe.PrismaticLibe;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Hashtable;
 
 
@@ -15,35 +17,19 @@ public class SoundHelper {
     public static final File soundDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\sound");
     public static final File musicDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\music");
     public static final File streamingDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\streaming");
-    private static SoundHelper soundHelper;
-    private Minecraft mc;
-
-    public SoundHelper(){
-        mc = Minecraft.getMinecraft(this);
-        PrismaticLibe.LOGGER.info(soundDirectory.getAbsolutePath());
-        soundHelper = this;
-    }
-    public static SoundHelper getInstance(){
-        if (soundHelper == null){
-            return new SoundHelper();
-        }
-        return soundHelper;
-    }
-    public void addMusic(String MOD_ID, String soundSource){
+    public static void addMusic(String MOD_ID, String soundSource){
         String destination = ("\\" + soundSource.replace("/", "\\")).replace("\\\\", "\\");
         String source = ("/assets/" + MOD_ID + "/music/" + soundSource).replace("//", "/").trim();
 
-        String tempfile = extract(source);
-        FileUtils.copy(new File(tempfile), new File(musicDirectory, destination));
+        PrismaticLibe.LOGGER.info(extract(source, destination) + "Added to sound directory");
     }
-    public void addSound(String MOD_ID, String soundSource){
-        String destination = ("\\" + MOD_ID + "\\" + soundSource.replace("/", "\\")).replace("\\\\", "\\");
+    public static void addSound(String MOD_ID, String soundSource){
+        String destination = soundDirectory + ("\\" + MOD_ID + "\\").replace("\\\\", "\\");
         String source = ("/assets/" + MOD_ID + "/sound/" + soundSource).replace("//", "/").trim();
 
-        String tempfile = extract(source);
-        FileUtils.copy(new File(tempfile), new File(soundDirectory, destination));
+        PrismaticLibe.LOGGER.info(extract(source, destination) + "Added to sound directory");
     }
-    private static String extract(String jarFilePath){
+    private static String extract(String jarFilePath, String destination){
 
         if(jarFilePath == null)
             return null;
@@ -65,14 +51,16 @@ public class SoundHelper {
             String[] chopped = jarFilePath.split("\\/");
             String fileName = chopped[chopped.length-1];
 
-            // Create our temp file (first param is just random bits)
-            File tempFile = File.createTempFile("asdf", fileName);
+            File tempFile = new File(new File(destination), fileName);
+            Files.createDirectories(Paths.get(destination));
+            tempFile.delete();
+            tempFile.createNewFile();
 
             // Set this file to be deleted on VM exit
             tempFile.deleteOnExit();
 
             // Create an output stream to barf to the temp file
-            OutputStream out = new FileOutputStream(tempFile);
+            OutputStream out = Files.newOutputStream(tempFile.toPath());
 
             // Write the file to the temp file
             byte[] buffer = new byte[1024];
@@ -93,6 +81,7 @@ public class SoundHelper {
             return tempFile.getAbsolutePath();
 
         } catch (IOException e) {
+            PrismaticLibe.LOGGER.warn(e.getMessage());
             return null;
         }
     }

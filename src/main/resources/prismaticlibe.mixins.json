@@ -6,9 +6,9 @@
     "mixins": [
         "GuiItemDragHandlerMixin",
         "GuiRenderItemMixin",
-        "MinecraftMixin",
-        "mixinItemEntityRenderer",
-        "mixinItemRenderer"
+        "ItemEntityRendererMixin",
+        "ItemRendererMixin",
+        "MinecraftMixin"
     ],
     "client": [
     ],

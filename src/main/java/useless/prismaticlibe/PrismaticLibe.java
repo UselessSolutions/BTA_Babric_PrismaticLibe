@@ -3,7 +3,7 @@ package useless.prismaticlibe;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import useless.prismaticlibe.helper.SoundHelper;
 
 
 public class PrismaticLibe implements ModInitializer {

@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.Unique;
 import useless.prismaticlibe.IColored;
 
 @Mixin(value = ItemRenderer.class, remap = false)
-public class mixinItemRenderer {
+public class ItemRendererMixin {
     @Shadow
     private Minecraft mc;
     @Shadow
