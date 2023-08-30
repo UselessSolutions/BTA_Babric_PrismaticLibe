@@ -1,6 +1,6 @@
 # PrismaticLibe
 
-A helper library for colored items in BTA.
+Useless' mod library.
 
 
 ## How to include PrismaticLibe in a project
