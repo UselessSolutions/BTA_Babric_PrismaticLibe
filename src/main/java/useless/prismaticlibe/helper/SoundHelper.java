@@ -1,8 +1,8 @@
 package useless.prismaticlibe.helper;
 
 
-import com.b100.utils.FileUtils;
 import net.minecraft.client.Minecraft;
+import org.apache.logging.log4j.core.util.FileUtils;
 import useless.prismaticlibe.PrismaticLibe;
 
 import java.io.*;
@@ -17,10 +17,8 @@ public class SoundHelper {
     public static final File soundDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\sound");
     public static final File musicDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\music");
     public static final File streamingDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\streaming");
-    public SoundHelper(){
-    }
 
-    public  void addMusic(String MOD_ID, String soundSource){
+    public static void addMusic(String MOD_ID, String soundSource){
         String destination = musicDirectory + ("\\" + soundSource.replace("/", "\\")).replace("\\\\", "\\");
         String source = ("/assets/" + MOD_ID + "/music/" + soundSource).replace("//", "/").trim();
         PrismaticLibe.LOGGER.info("File source: " + source);
@@ -28,7 +26,7 @@ public class SoundHelper {
 
         PrismaticLibe.LOGGER.info(extract(source, destination, soundSource) + " Added to sound directory");
     }
-    public  void addSound(String MOD_ID, String soundSource){
+    public static void addSound(String MOD_ID, String soundSource){
         String destination = soundDirectory + ("\\" + MOD_ID + "\\").replace("\\\\", "\\");
         String source = ("/assets/" + MOD_ID + "/sound/" + soundSource).replace("//", "/").trim();
         PrismaticLibe.LOGGER.info("File source: " + source);
@@ -36,7 +34,7 @@ public class SoundHelper {
 
         PrismaticLibe.LOGGER.info(extract(source, destination, soundSource) + " Added to sound directory");
     }
-    private  String extract(String jarFilePath, String destination, String soundSource){
+    private static String extract(String jarFilePath, String destination, String soundSource){
 
         if(jarFilePath == null)
             return null;
@@ -55,10 +53,9 @@ public class SoundHelper {
                 return null;
 
             File tempFile = new File(new File(destination), soundSource);
-            PrismaticLibe.LOGGER.info("Temp file: " + tempFile.getAbsolutePath());
-            Files.createDirectories(Paths.get(destination));
+            tempFile.getParentFile().mkdirs();
             tempFile.delete();
-            tempFile.createNewFile();
+            Files.createFile(tempFile.toPath());
 
             // Set this file to be deleted on VM exit
             tempFile.deleteOnExit();
@@ -85,7 +82,10 @@ public class SoundHelper {
             return tempFile.getAbsolutePath();
 
         } catch (IOException e) {
-            PrismaticLibe.LOGGER.warn(e.getMessage());
+            PrismaticLibe.LOGGER.warn(e.toString());
+            for (StackTraceElement element :e.getStackTrace()){
+                PrismaticLibe.LOGGER.debug(element.toString());
+            }
             return null;
         }
     }
