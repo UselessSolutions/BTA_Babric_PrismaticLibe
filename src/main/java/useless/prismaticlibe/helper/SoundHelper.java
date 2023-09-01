@@ -14,12 +14,12 @@ import java.util.Hashtable;
 public class SoundHelper {
     private static Hashtable<String, String> fileCache = new Hashtable<String, String>();
     public static final File appDirectory = Minecraft.getAppDir("minecraft-bta");
-    public static final File soundDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\sound");
-    public static final File musicDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\music");
-    public static final File streamingDirectory = new File(appDirectory.getAbsolutePath() + "\\resources\\mod\\streaming");
+    public static final File soundDirectory = new File(appDirectory.getAbsolutePath() + "/resources/mod/sound");
+    public static final File musicDirectory = new File(appDirectory.getAbsolutePath() + "/resources/mod/music");
+    public static final File streamingDirectory = new File(appDirectory.getAbsolutePath() + "/resources/mod/streaming");
 
     public static void addMusic(String MOD_ID, String soundSource){
-        String destination = musicDirectory + ("\\" + soundSource.replace("/", "\\")).replace("\\\\", "\\");
+        String destination = musicDirectory + ("/" + soundSource).replace("//", "/");
         String source = ("/assets/" + MOD_ID + "/music/" + soundSource).replace("//", "/").trim();
         PrismaticLibe.LOGGER.info("File source: " + source);
         PrismaticLibe.LOGGER.info("File destination: " + destination);
@@ -27,7 +27,7 @@ public class SoundHelper {
         PrismaticLibe.LOGGER.info(extract(source, destination, soundSource) + " Added to sound directory");
     }
     public static void addSound(String MOD_ID, String soundSource){
-        String destination = soundDirectory + ("\\" + MOD_ID + "\\").replace("\\\\", "\\");
+        String destination = soundDirectory + ("/" + MOD_ID + "/").replace("//", "/");
         String source = ("/assets/" + MOD_ID + "/sound/" + soundSource).replace("//", "/").trim();
         PrismaticLibe.LOGGER.info("File source: " + source);
         PrismaticLibe.LOGGER.info("File destination: " + destination);
