@@ -4,13 +4,13 @@
     "package": "useless.prismaticlibe.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-        "GuiItemDragHandlerMixin",
-        "GuiRenderItemMixin",
-        "ItemEntityRendererMixin",
-        "ItemRendererMixin",
         "MinecraftMixin"
     ],
     "client": [
+        "GuiItemDragHandlerMixin",
+        "GuiRenderItemMixin",
+        "ItemEntityRendererMixin",
+        "ItemRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1
