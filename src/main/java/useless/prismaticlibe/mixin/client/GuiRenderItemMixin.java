@@ -1,4 +1,4 @@
-package useless.prismaticlibe.mixin;
+package useless.prismaticlibe.mixin.client;
 
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiRenderItem;

@@ -1,4 +1,4 @@
-package useless.prismaticlibe.mixin;
+package useless.prismaticlibe.mixin.core;
 
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;

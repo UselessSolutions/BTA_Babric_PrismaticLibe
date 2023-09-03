@@ -1,4 +1,4 @@
-package useless.prismaticlibe.mixin;
+package useless.prismaticlibe.mixin.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.*;
