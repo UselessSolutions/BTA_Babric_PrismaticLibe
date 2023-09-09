@@ -4,7 +4,6 @@
     "package": "useless.prismaticlibe.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-        "client.PlayerRendererMixin",
         "core.MinecraftMixin"
     ],
     "client": [
@@ -12,6 +11,7 @@
         "client.GuiRenderItemMixin",
         "client.ItemEntityRendererMixin",
         "client.ItemRendererMixin"
+        "client.PlayerRendererMixin",
     ],
     "injectors": {
         "defaultRequire": 1
