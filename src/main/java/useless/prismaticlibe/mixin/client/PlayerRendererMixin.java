@@ -23,10 +23,6 @@ public abstract class PlayerRendererMixin extends LivingRenderer<EntityPlayer> {
     public PlayerRendererMixin(ModelBase modelbase, float shadowSize) {
         super(modelbase, shadowSize);
     }
-    @Shadow
-    private ModelBiped modelArmor;
-
-
     @Shadow protected abstract boolean setArmorModel(EntityPlayer entity, int i, float f);
 
     @Inject(method = "setArmorModel(Lnet/minecraft/core/entity/player/EntityPlayer;IF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/PlayerRenderer;setRenderPassModel(Lnet/minecraft/client/render/model/ModelBase;)V"))
