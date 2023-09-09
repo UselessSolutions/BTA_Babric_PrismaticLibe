@@ -1,5 +1,6 @@
 package useless.prismaticlibe.mixin;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.*;
 import net.minecraft.core.Global;
 import net.minecraft.core.block.Block;
@@ -40,18 +41,22 @@ public class ItemRendererMixin {
         int overlayTextureIndex = Item.iconCoordToIndex(coloredItem.overlayTexture()[0], coloredItem.overlayTexture()[1]); // Specified texture
         int overlayColor = coloredItem.overlayColor();
 
+        float brightness = entity.getBrightness(1f);
+        if (Minecraft.getMinecraft(this).fullbright) {
+            brightness = 1.0f;
+        }
 
         // UV coordinates
-        renderModel(tessellator, tileWidth, baseTextureIndex, baseColor, handheldTransform);
-        renderModel(tessellator, tileWidth, overlayTextureIndex, overlayColor, false);
+        renderModel(tessellator, tileWidth, baseTextureIndex, baseColor, brightness, handheldTransform);
+        renderModel(tessellator, tileWidth, overlayTextureIndex, overlayColor, brightness, false);
         GL11.glDisable(32826);
     }
 
     @Unique
-    public void renderModel(Tessellator tessellator, int tileWidth, int textureIndex, int color, boolean handheldTransform){
-        float red = (float)(color >> 16 & 0xFF) / 255.0f;
-        float green = (float)(color >> 8 & 0xFF) / 255.0f;
-        float blue = (float)(color & 0xFF) / 255.0f;
+    public void renderModel(Tessellator tessellator, int tileWidth, int textureIndex, int color, float brightness, boolean handheldTransform){
+        float red = ((float)(color >> 16 & 0xFF) / 255.0f) * brightness;
+        float green = ((float)(color >> 8 & 0xFF) / 255.0f) * brightness;
+        float blue = ((float)(color & 0xFF) / 255.0f) * brightness;
 
         float f = ((float)(textureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + 0.0f) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
         float f1 = ((float)(textureIndex % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + ((float)tileWidth - 0.01f)) / (float)(Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
