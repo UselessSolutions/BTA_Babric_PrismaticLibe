@@ -34,9 +34,10 @@ public abstract class PlayerRendererMixin extends LivingRenderer<EntityPlayer> {
         if (itemstack != null) {
             Item item = itemstack.getItem();
             if (item instanceof IColored){
+                float brightness = entity.getBrightness(1f);
                 int color = ((IColored) item).baseColor();
                 float[] baseColorRGB = new float[] {(float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f};
-                GL11.glColor3f(baseColorRGB[0], baseColorRGB[1], baseColorRGB[2]);
+                GL11.glColor3f(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
             }
         }
     }
