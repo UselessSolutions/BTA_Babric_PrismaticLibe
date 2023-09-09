@@ -1,5 +1,6 @@
 package useless.prismaticlibe.mixin.client;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.entity.LivingRenderer;
 import net.minecraft.client.render.entity.PlayerRenderer;
 import net.minecraft.client.render.model.ModelBase;
@@ -35,6 +36,9 @@ public abstract class PlayerRendererMixin extends LivingRenderer<EntityPlayer> {
             Item item = itemstack.getItem();
             if (item instanceof IColored){
                 float brightness = entity.getBrightness(1f);
+                if (Minecraft.getMinecraft(this).fullbright){
+                    brightness = 1;
+                }
                 int color = ((IColored) item).baseColor();
                 float[] baseColorRGB = new float[] {(float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f};
                 GL11.glColor3f(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
