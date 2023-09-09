@@ -10,8 +10,8 @@
         "client.GuiItemDragHandlerMixin",
         "client.GuiRenderItemMixin",
         "client.ItemEntityRendererMixin",
-        "client.ItemRendererMixin"
-        "client.PlayerRendererMixin",
+        "client.ItemRendererMixin",
+        "client.PlayerRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1
