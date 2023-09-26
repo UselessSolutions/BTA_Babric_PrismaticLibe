@@ -2,7 +2,9 @@
     "required": true,
     "minVersion": "0.8",
     "package": "useless.prismaticlibe.mixin",
+  	"plugin": "useless.prismaticlibe.mixin.PrismaticLibeMixinPlugin",
     "compatibilityLevel": "JAVA_8",
+	"mixinPriority": 10,
     "mixins": [
         "MinecraftMixin"
     ],
@@ -14,5 +16,5 @@
     ],
     "injectors": {
         "defaultRequire": 1
-  }
+  	}
 }
