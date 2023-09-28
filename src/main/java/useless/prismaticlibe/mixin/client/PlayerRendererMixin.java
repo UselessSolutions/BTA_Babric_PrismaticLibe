@@ -28,13 +28,15 @@ public abstract class PlayerRendererMixin extends LivingRenderer<EntityPlayer> {
     @Inject(method = "setArmorModel(Lnet/minecraft/core/entity/player/EntityPlayer;IF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/PlayerRenderer;setRenderPassModel(Lnet/minecraft/client/render/model/ModelBase;)V"))
     private void injected(EntityPlayer entity, int i, float f, CallbackInfoReturnable<Boolean> cir){
         ItemStack itemstack = entity.inventory.armorItemInSlot(3 - i);
+        float brightness = entity.getBrightness(1f);
+        if (Minecraft.getMinecraft(this).fullbright){
+            brightness = 1;
+        }
+        GL11.glColor3f(brightness, brightness, brightness);
         if (itemstack != null) {
             Item item = itemstack.getItem();
             if (item instanceof IColored){
-                float brightness = entity.getBrightness(1f);
-                if (Minecraft.getMinecraft(this).fullbright){
-                    brightness = 1;
-                }
+
                 int color = ((IColored) item).baseColor();
                 float[] baseColorRGB = new float[] {(float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f};
                 GL11.glColor3f(baseColorRGB[0] * brightness, baseColorRGB[1] * brightness, baseColorRGB[2] * brightness);
