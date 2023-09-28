@@ -9,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import turniplabs.halplibe.helper.ArmorHelper;
 import turniplabs.halplibe.helper.ItemHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class PrismaticLibe implements ModInitializer {
