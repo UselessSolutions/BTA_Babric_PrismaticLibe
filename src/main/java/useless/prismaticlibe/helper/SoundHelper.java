@@ -17,7 +17,24 @@ public class SoundHelper {
     public static final File soundDirectory = new File(appDirectory.getAbsolutePath() + "/resources/mod/sound");
     public static final File musicDirectory = new File(appDirectory.getAbsolutePath() + "/resources/mod/music");
     public static final File streamingDirectory = new File(appDirectory.getAbsolutePath() + "/resources/mod/streaming");
+    public static final File caveMusicDirectory = new File(appDirectory.getAbsolutePath() + "/resources/mod/cavemusic");
 
+    public static void addCaveMusic(String MOD_ID, String soundSource){
+        String destination = streamingDirectory.getPath();
+        String source = ("/assets/" + MOD_ID + "/cavemusic/" + soundSource).replace("//", "/").trim();
+        PrismaticLibe.LOGGER.info("File source: " + source);
+        PrismaticLibe.LOGGER.info("File destination: " + destination);
+
+        PrismaticLibe.LOGGER.info(extract(source, destination, soundSource) + " Added to sound directory");
+    }
+    public static void addStreaming(String MOD_ID, String soundSource){
+        String destination = streamingDirectory.getPath();
+        String source = ("/assets/" + MOD_ID + "/streaming/" + soundSource).replace("//", "/").trim();
+        PrismaticLibe.LOGGER.info("File source: " + source);
+        PrismaticLibe.LOGGER.info("File destination: " + destination);
+
+        PrismaticLibe.LOGGER.info(extract(source, destination, soundSource) + " Added to sound directory");
+    }
     public static void addMusic(String MOD_ID, String soundSource){
         String destination = musicDirectory.getPath();
         String source = ("/assets/" + MOD_ID + "/music/" + soundSource).replace("//", "/").trim();
