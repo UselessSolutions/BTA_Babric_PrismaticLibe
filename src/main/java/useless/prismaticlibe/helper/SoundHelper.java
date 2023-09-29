@@ -20,7 +20,7 @@ public class SoundHelper {
     public static final File caveMusicDirectory = new File(appDirectory.getAbsolutePath() + "/resources/mod/cavemusic");
 
     public static void addCaveMusic(String MOD_ID, String soundSource){
-        String destination = streamingDirectory.getPath();
+        String destination = caveMusicDirectory.getPath();
         String source = ("/assets/" + MOD_ID + "/cavemusic/" + soundSource).replace("//", "/").trim();
         PrismaticLibe.LOGGER.info("File source: " + source);
         PrismaticLibe.LOGGER.info("File destination: " + destination);
