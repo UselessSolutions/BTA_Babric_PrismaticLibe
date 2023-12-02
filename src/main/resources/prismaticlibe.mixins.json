@@ -6,7 +6,6 @@
     "compatibilityLevel": "JAVA_8",
 	"mixinPriority": 10,
     "mixins": [
-        "MinecraftMixin"
     ],
     "client": [
         "GuiItemDragHandlerMixin",
