@@ -12,8 +12,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import useless.prismaticlibe.gui.slot.IAlpha;
+import useless.prismaticlibe.gui.slot.IHighlighting;
 import useless.prismaticlibe.gui.slot.IResizable;
-import useless.prismaticlibe.gui.slot.SlotCraftingDisplay;
 
 @Mixin(value = GuiRenderItem.class, remap = false, priority = 0)
 public class GuiRenderItemMixin extends Gui {
@@ -25,29 +26,36 @@ public class GuiRenderItemMixin extends Gui {
     private int slotSize;
     @Unique
     private boolean drawBackground;
+    @Unique
+    private float itemAlpha;
 
     @Inject(method = "render(Lnet/minecraft/core/item/ItemStack;IIZLnet/minecraft/core/player/inventory/slot/Slot;)V", at = @At(value = "HEAD"))
     public void renderInjectHead(ItemStack itemStack, int x, int y, boolean isSelected, Slot slot, CallbackInfo cbi){
         drawBackground = isSelected;
-        isDiscovered = true;
+
         if (slot != null) {
             isDiscovered = slot.discovered;
+        } else {
+            isDiscovered = true;
         }
-        slotSize = 18;
-        renderScale = 1f;
+
+
         if (slot instanceof IResizable){
             slotSize = ((IResizable) slot).getWidth();
             renderScale = (slotSize)/18f;
+        } else {
+            slotSize = 18;
+            renderScale = 1f;
+        }
+        
+        if (slot instanceof IAlpha){
+            itemAlpha = ((IAlpha) slot).getStackAlpha();
+        } else {
+            itemAlpha = 1f;
         }
 
-        // Render Crafting fadeout
-        if(slot instanceof SlotCraftingDisplay && ((SlotCraftingDisplay)slot).highlight){
-            GL11.glDisable(2896);
-            GL11.glDisable(2929);
-            this.drawRect(x, y, x + slotSize-2, y + slotSize-2, 0x80000000 + ((SlotCraftingDisplay)slot).color);
-            GL11.glEnable(2896);
-            GL11.glEnable(2929);
-            drawBackground = false;
+        if(slot instanceof IHighlighting){
+            drawBackground = ((IHighlighting) slot).drawStandardHighlight();
         }
     }
 
@@ -63,11 +71,11 @@ public class GuiRenderItemMixin extends Gui {
 
     @Redirect(method = "render(Lnet/minecraft/core/item/ItemStack;IIZLnet/minecraft/core/player/inventory/slot/Slot;)V",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/entity/ItemEntityRenderer;renderItemOverlayIntoGUI(Lnet/minecraft/client/render/FontRenderer;Lnet/minecraft/client/render/RenderEngine;Lnet/minecraft/core/item/ItemStack;IILjava/lang/String;)V"))
-    private void drawTextRedirect(ItemEntityRenderer itemRenderer, FontRenderer fontrenderer, RenderEngine renderengine, ItemStack itemstack, int i, int j, String override){
-        int newX = (int)(i * (1/renderScale));
-        int newY = (int)(j * (1/renderScale));
-        itemRenderer.renderItemOverlayIntoGUI(fontrenderer, renderengine, itemstack, newX, newY, isDiscovered ? null : "?");
+                    target = "Lnet/minecraft/client/render/entity/ItemEntityRenderer;renderItemOverlayIntoGUI(Lnet/minecraft/client/render/FontRenderer;Lnet/minecraft/client/render/RenderEngine;Lnet/minecraft/core/item/ItemStack;IILjava/lang/String;F)V"))
+    private void drawTextRedirect(ItemEntityRenderer instance, FontRenderer fontrenderer, RenderEngine renderengine, ItemStack itemstack, int x, int y, String override, float alpha){
+        int newX = (int)(x * (1/renderScale));
+        int newY = (int)(y * (1/renderScale));
+        instance.renderItemOverlayIntoGUI(fontrenderer, renderengine, itemstack, newX, newY,  isDiscovered ? null : "?", itemAlpha);
         GL11.glScaled(1/renderScale, 1/renderScale, 1/renderScale);
     }
 
@@ -77,6 +85,17 @@ public class GuiRenderItemMixin extends Gui {
     private void drawRectRedirect(GuiRenderItem guiRenderItem,int minX, int minY, int maxX, int maxY, int argb){
         if (drawBackground){
             this.drawRect(minX, minY,minX + slotSize-2,minY + slotSize-2, -2130706433);
+        }
+
+    }
+    @Inject(method = "render(Lnet/minecraft/core/item/ItemStack;IIZLnet/minecraft/core/player/inventory/slot/Slot;)V", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glDisable(I)V", ordinal = 4, shift = At.Shift.BEFORE))
+    private void drawHighlight(ItemStack itemStack, int x, int y, boolean isSelected, Slot slot, CallbackInfo ci){
+        if(slot instanceof IHighlighting && ((IHighlighting)slot).isHighlighted()){
+            GL11.glDisable(2896);
+            GL11.glDisable(2929);
+            this.drawRect(x, y, x + slotSize-2, y + slotSize-2, 0x80000000 + ((IHighlighting)slot).getHighlightColor());
+            GL11.glEnable(2896);
+            GL11.glEnable(2929);
         }
     }
 }
