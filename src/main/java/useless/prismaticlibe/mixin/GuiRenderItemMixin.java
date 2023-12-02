@@ -47,7 +47,7 @@ public class GuiRenderItemMixin extends Gui {
             slotSize = 18;
             renderScale = 1f;
         }
-        
+
         if (slot instanceof IAlpha){
             itemAlpha = ((IAlpha) slot).getStackAlpha();
         } else {

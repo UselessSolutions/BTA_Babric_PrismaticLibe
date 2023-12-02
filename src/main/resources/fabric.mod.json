@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "prismaticlibe",
-  "version": "2.2.0",
+  "version": "${version}",
 
   "name": "Prismatic Library",
   "description": "Useless' item rendering and sound library.",
