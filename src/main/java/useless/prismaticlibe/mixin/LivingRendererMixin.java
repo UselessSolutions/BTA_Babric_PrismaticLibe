@@ -57,7 +57,7 @@ public abstract class LivingRendererMixin<T extends EntityLiving> {
             if (itemstack != null && itemstack.getItem() instanceof IColoredArmor){
                 // do stuff
                 ColoredArmorTexture[] cTex = ((IColoredArmor) itemstack.getItem()).getArmorTextures(itemstack);
-                for (ColoredArmorTexture coloredTex: cTex) {
+                for (ColoredArmorTexture ignored : cTex) {
                     GL11.glEnable(GL11.GL_BLEND);
                     GL11.glBlendFunc(770, 771);
                     shouldRenderPass(entity, renderPass, partialTick);
@@ -66,6 +66,7 @@ public abstract class LivingRendererMixin<T extends EntityLiving> {
                     GL11.glEnable(3008);
                     PrismaticLibe.playerArmorRenderOffset++;
                 }
+                PrismaticLibe.playerArmorRenderOffset = 0;
                 return false;
             }
         }

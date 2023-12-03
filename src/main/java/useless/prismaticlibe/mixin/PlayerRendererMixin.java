@@ -32,6 +32,7 @@ public class PlayerRendererMixin {
         armorTextures = null;
         if (itemstack != null && itemstack.getItem() instanceof IColoredArmor){
             armorTextures =((IColoredArmor) itemstack.getItem()).getArmorTextures(itemstack);
+            if (PrismaticLibe.playerArmorRenderOffset > armorTextures.length) return;
             Color color = armorTextures[PrismaticLibe.playerArmorRenderOffset].getColor();
             GL11.glColor4f((color.getRed()/255f) * brightness, (color.getGreen()/255f) * brightness, (color.getBlue()/255f) * brightness,color.getAlpha()/255f);
         }
@@ -44,6 +45,7 @@ public class PlayerRendererMixin {
     @Redirect(method = "setArmorModel(Lnet/minecraft/core/entity/player/EntityPlayer;IF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/PlayerRenderer;loadTexture(Ljava/lang/String;)V", ordinal = 3))
     private void customArmorTexture(PlayerRenderer instance, String string){
         if (armorTextures != null){
+            if (PrismaticLibe.playerArmorRenderOffset > armorTextures.length) return;
             String tmp = string.replace(".png", "");
             int renderPass = Integer.decode(String.valueOf(tmp.charAt(tmp.length()-1)));
             ((EntityRendererAccessor)instance).invokeLoadTexture("/armor/" + armorTextures[PrismaticLibe.playerArmorRenderOffset].getArmorTexture() + "_" + (renderPass != 2 ? 1 : 2) + ".png");
