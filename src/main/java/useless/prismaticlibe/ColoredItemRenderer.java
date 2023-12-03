@@ -9,7 +9,6 @@ import net.minecraft.client.render.entity.ItemEntityRenderer;
 import net.minecraft.core.Global;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.EntityItem;
-import net.minecraft.core.entity.EntityLiving;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.item.tag.ItemTags;
@@ -80,6 +79,7 @@ public class ColoredItemRenderer {
                     GL11.glTranslatef((float)x, (float)y + bobbingOffset, (float)z);
                     GL11.glEnable(32826);
                     GL11.glEnable(GL11.GL_BLEND);
+                    GL11.glBlendFunc(770, 771);
                     GL11.glScalef(0.5F, 0.5F, 0.5F);
 
                     int texIndex = coloredTexture.getTextureIndex();
@@ -117,7 +117,7 @@ public class ColoredItemRenderer {
                         for(int j = 0; j < renderCount; ++j) {
                             GL11.glPushMatrix();
                             GL11.glTranslated(0.0, 0.0, 0.1 * (double)j);
-                            renderItem3dColored(entity, coloredTexture, false);
+                            renderItem3dSingleLayer(entity, coloredTexture, false);
                             GL11.glPopMatrix();
                         }
 
@@ -151,7 +151,7 @@ public class ColoredItemRenderer {
             }
         }
     }
-    public static void renderItem3dColored(Entity entity, ColoredTexture coloredTexture, boolean handheldTransform){
+    public static void renderItem3dSingleLayer(Entity entity, ColoredTexture coloredTexture, boolean handheldTransform){
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(770, 771);
@@ -274,5 +274,11 @@ public class ColoredItemRenderer {
         GL11.glDisable(32826);
 
         GL11.glPopMatrix();
+    }
+    public static void renderItem3dColored(Entity entity, ItemStack itemstack, boolean handheldTransform){
+        IColored iColored = (IColored) itemstack.getItem();
+        for (ColoredTexture coloredTex: iColored.getTextures(itemstack)) {
+            renderItem3dSingleLayer(entity, coloredTex, handheldTransform);
+        }
     }
 }
