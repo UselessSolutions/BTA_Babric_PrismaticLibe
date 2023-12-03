@@ -1,18 +1,21 @@
 {
-    "required": true,
-    "minVersion": "0.8",
-    "package": "useless.prismaticlibe.mixin",
-    "compatibilityLevel": "JAVA_8",
-	"mixinPriority": 10,
-    "mixins": [
-    ],
-    "client": [
-        "GuiItemDragHandlerMixin",
-        "GuiRenderItemMixin",
-        "ItemEntityRendererMixin",
-        "ItemRendererMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-  	}
+  "required": true,
+  "minVersion": "0.8",
+  "package": "useless.prismaticlibe.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixinPriority": 10,
+  "mixins": [
+    "accessor.EntityRendererAccessor",
+    "accessor.ItemEntityRendererAccessor",
+    "accessor.ItemRendererAccessor"
+  ],
+  "client": [
+    "GuiItemDragHandlerMixin",
+    "GuiRenderItemMixin",
+    "ItemEntityRendererMixin",
+    "ItemRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
