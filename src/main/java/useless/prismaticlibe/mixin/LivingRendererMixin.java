@@ -58,6 +58,8 @@ public abstract class LivingRendererMixin<T extends EntityLiving> {
                 // do stuff
                 ColoredArmorTexture[] cTex = ((IColoredArmor) itemstack.getItem()).getArmorTextures(itemstack);
                 for (ColoredArmorTexture coloredTex: cTex) {
+                    GL11.glEnable(GL11.GL_BLEND);
+                    GL11.glBlendFunc(770, 771);
                     shouldRenderPass(entity, renderPass, partialTick);
                     this.renderPassModel.render(limbSwing, limbYaw, ticksExisted, headYaw - headYawOffset, headPitch, scale);
                     GL11.glDisable(3042);
