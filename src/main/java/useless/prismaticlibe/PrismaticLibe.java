@@ -9,11 +9,12 @@ import useless.prismaticlibe.debug.DebugMain;
 public class PrismaticLibe implements ModInitializer {
     public static final String MOD_ID = "prismaticlibe";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static int playerArmorRenderOffset = 0;
 
 
     @Override
     public void onInitialize() {
-//        DebugMain.init();
+        DebugMain.init();
         LOGGER.info("PrismaticLibe initialized.");
     }
 }

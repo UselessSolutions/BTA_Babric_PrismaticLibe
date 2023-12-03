@@ -9,8 +9,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import useless.prismaticlibe.ColoredArmorTexture;
 import useless.prismaticlibe.IColoredArmor;
+import useless.prismaticlibe.PrismaticLibe;
+import useless.prismaticlibe.mixin.accessor.EntityRendererAccessor;
 
 import java.awt.*;
 
@@ -18,13 +22,17 @@ import java.awt.*;
 public class PlayerRendererMixin {
     @Unique
     private final Minecraft mc = Minecraft.getMinecraft(this);
+    @Unique
+    private ColoredArmorTexture[] armorTextures;
     @Inject(method = "setArmorModel(Lnet/minecraft/core/entity/player/EntityPlayer;IF)Z", at = @At("HEAD"))
     private void colorArmor(EntityPlayer entity, int renderPass, float partialTick, CallbackInfoReturnable<Boolean> cir){
         float brightness = mc.fullbright ? 1f : entity.getBrightness(0);
         GL11.glColor4f(brightness,brightness,brightness,brightness);
         ItemStack itemstack = entity.inventory.armorItemInSlot(3 - renderPass);
+        armorTextures = null;
         if (itemstack != null && itemstack.getItem() instanceof IColoredArmor){
-            Color color = ((IColoredArmor) itemstack.getItem()).getArmorColor(itemstack);
+            armorTextures =((IColoredArmor) itemstack.getItem()).getArmorTextures(itemstack);
+            Color color = armorTextures[PrismaticLibe.playerArmorRenderOffset].getColor();
             GL11.glColor4f((color.getRed()/255f) * brightness, (color.getGreen()/255f) * brightness, (color.getBlue()/255f) * brightness,color.getAlpha()/255f);
         }
     }
@@ -32,5 +40,15 @@ public class PlayerRendererMixin {
     private void colorArmorOff(EntityPlayer entity, int renderPass, float partialTick, CallbackInfoReturnable<Boolean> cir){
         float brightness = mc.fullbright ? 1f : entity.getBrightness(0);
         GL11.glColor4f(brightness,brightness,brightness,brightness);
+    }
+    @Redirect(method = "setArmorModel(Lnet/minecraft/core/entity/player/EntityPlayer;IF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/PlayerRenderer;loadTexture(Ljava/lang/String;)V", ordinal = 3))
+    private void customArmorTexture(PlayerRenderer instance, String string){
+        if (armorTextures != null){
+            String tmp = string.replace(".png", "");
+            int renderPass = Integer.decode(String.valueOf(tmp.charAt(tmp.length()-1)));
+            ((EntityRendererAccessor)instance).invokeLoadTexture("/armor/" + armorTextures[PrismaticLibe.playerArmorRenderOffset].getArmorTexture() + "_" + (renderPass != 2 ? 1 : 2) + ".png");
+        } else {
+            ((EntityRendererAccessor)instance).invokeLoadTexture(string);
+        }
     }
 }

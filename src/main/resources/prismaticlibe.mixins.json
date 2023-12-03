@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixinPriority": 10,
   "mixins": [
-
+    "LivingRendererMixin"
   ],
   "client": [
     "GuiItemDragHandlerMixin",
