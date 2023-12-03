@@ -27,4 +27,10 @@ public class ColoredTexture {
     public Color getColor(){
         return color;
     }
+    public void setColor(Color color){
+        this.color = color;
+    }
+    public void setTexture(int[] texture){
+        this.textureCoordinates = texture;
+    }
 }

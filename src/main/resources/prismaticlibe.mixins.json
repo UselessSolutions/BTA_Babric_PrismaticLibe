@@ -5,15 +5,17 @@
   "compatibilityLevel": "JAVA_8",
   "mixinPriority": 10,
   "mixins": [
-    "accessor.EntityRendererAccessor",
-    "accessor.ItemEntityRendererAccessor",
-    "accessor.ItemRendererAccessor"
+
   ],
   "client": [
     "GuiItemDragHandlerMixin",
     "GuiRenderItemMixin",
     "ItemEntityRendererMixin",
-    "ItemRendererMixin"
+    "ItemRendererMixin",
+    "PlayerRendererMixin",
+    "accessor.EntityRendererAccessor",
+    "accessor.ItemEntityRendererAccessor",
+    "accessor.ItemRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

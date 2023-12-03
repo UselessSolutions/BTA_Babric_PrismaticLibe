@@ -1,7 +1,16 @@
 package useless.prismaticlibe.debug;
 
+import net.minecraft.core.item.material.ArmorMaterial;
+import turniplabs.halplibe.helper.ArmorHelper;
+
 public class DebugMain {
     public static void init(){
-        new ItemColored(19000);
+        int id = 19000;
+        new ItemColored(id++);
+        ArmorMaterial material = ArmorHelper.createArmorMaterial("cloth", 10, 50,50,50,50);
+        new ItemArmorColored("helm", id++, material, 0);
+        new ItemArmorColored("ches", id++, material, 1);
+        new ItemArmorColored("leg", id++, material, 2);
+        new ItemArmorColored("boot", id++, material, 3);
     }
 }

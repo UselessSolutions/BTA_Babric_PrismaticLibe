@@ -13,7 +13,7 @@ public class PrismaticLibe implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        DebugMain.init();
+//        DebugMain.init();
         LOGGER.info("PrismaticLibe initialized.");
     }
 }
