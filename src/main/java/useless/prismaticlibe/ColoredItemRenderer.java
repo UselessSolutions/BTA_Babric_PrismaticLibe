@@ -47,7 +47,7 @@ public class ColoredItemRenderer {
     }
 
     public static int[] indexToCoordinate(int index, int tileWidth){
-        return new int[]{index % 32 * tileWidth, index / 32 * tileWidth};
+        return new int[]{index % Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, index / Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth};
     }
     public static void doRenderItem(ItemEntityRenderer itemEntityRenderer, EntityItem entity, double x, double y, double z, float yaw, float partialTick) {
         ItemEntityRendererAccessor rendererAccessor = (ItemEntityRendererAccessor)itemEntityRenderer;
@@ -180,7 +180,7 @@ public class ColoredItemRenderer {
 
         int texIndex = coloredTexture.getTextureIndex();
         int[] texture = indexToCoordinate(texIndex, tileWidth);
-        float atlasWidth = 32 * tileWidth;
+        float atlasWidth = Global.TEXTURE_ATLAS_WIDTH_TILES * tileWidth;
         float ul = (float)(texture[0]) / atlasWidth;
         float ur = (float)(texture[0] + tileWidth) / atlasWidth;
         float vt = (float)(texture[1]) / atlasWidth;
