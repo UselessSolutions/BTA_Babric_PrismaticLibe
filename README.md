@@ -25,5 +25,5 @@ dependencies {
 ```
 And add this to your `gradle.properties`
 ```groovy
-prismatic_version=2.1.1
+prismatic_version=3.0.2-7.1
 ```
