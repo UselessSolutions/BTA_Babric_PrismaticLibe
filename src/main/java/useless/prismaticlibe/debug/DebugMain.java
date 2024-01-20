@@ -1,8 +1,9 @@
 package useless.prismaticlibe.debug;
 
 import net.minecraft.core.item.material.ArmorMaterial;
+import org.jetbrains.annotations.ApiStatus;
 import turniplabs.halplibe.helper.ArmorHelper;
-
+@ApiStatus.Internal
 public class DebugMain {
     public static void init(){
         int id = 19000;

@@ -2,11 +2,12 @@ package useless.prismaticlibe.debug;
 
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import useless.prismaticlibe.ColoredTexture;
 import useless.prismaticlibe.IColored;
 
 import java.awt.*;
-
+@ApiStatus.Internal
 public class ItemColored extends Item implements IColored {
     private final ColoredTexture[] textures = new ColoredTexture[]{
             new ColoredTexture(new int[]{11,1}, new Color(255,255,0, 255)),
