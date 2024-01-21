@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_8",
   "mixinPriority": 10,
   "mixins": [
-    "LivingRendererMixin"
   ],
   "client": [
     "GuiItemDragHandlerMixin",
@@ -13,6 +12,7 @@
     "ItemEntityRendererMixin",
     "ItemRendererMixin",
     "PlayerRendererMixin",
+    "LivingRendererMixin",
     "accessor.EntityRendererAccessor",
     "accessor.ItemEntityRendererAccessor",
     "accessor.ItemRendererAccessor"
