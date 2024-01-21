@@ -40,7 +40,7 @@ public abstract class LivingRendererMixin<T extends EntityLiving> {
     @Inject(method = "render(Lnet/minecraft/core/entity/EntityLiving;DDDFF)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingRenderer;shouldRenderPass(Lnet/minecraft/core/entity/EntityLiving;IF)Z", shift = At.Shift.BEFORE),
     locals = LocalCapture.CAPTURE_FAILHARD)
-    private void captureLocals(T entity, double x, double y, double z, float yaw, float partialTick, CallbackInfo ci, float yaw2, float partialTick2, float headYawOffset, float headYaw, float headPitch, float ticksExisted, float scale, float limbYaw, float limbSwing, int renderPass){
+    private void captureLocals(T entity, double x, double y, double z, float yaw, float partialTick, CallbackInfo ci, float headYawOffset, float headYaw, float headPitch, float ticksExisted, float scale, float limbYaw, float limbSwing, int renderPass){
         this.limbSwing = limbSwing;
         this.limbYaw = limbYaw;
         this.ticksExisted = ticksExisted;
