@@ -40,7 +40,7 @@ public class PlayerRendererMixin {
     @Inject(method = "setArmorModel(Lnet/minecraft/core/entity/player/EntityPlayer;IF)Z", at = @At("TAIL"))
     private void colorArmorOff(EntityPlayer entity, int renderPass, float partialTick, CallbackInfoReturnable<Boolean> cir){
         float brightness = mc.fullbright ? 1f : entity.getBrightness(0);
-        GL11.glColor4f(brightness,brightness,brightness,brightness);
+        GL11.glColor4f(brightness,brightness,brightness,1f);
     }
     @Redirect(method = "setArmorModel(Lnet/minecraft/core/entity/player/EntityPlayer;IF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/PlayerRenderer;loadTexture(Ljava/lang/String;)V", ordinal = 3))
     private void customArmorTexture(PlayerRenderer instance, String string){
