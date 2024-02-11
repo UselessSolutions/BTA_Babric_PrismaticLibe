@@ -8,13 +8,13 @@ Add this in your `build.gradle`:
 ```groovy
 repositories {
     ivy {
-        url = "https://github.com/UselessBullets"
-        patternLayout {
-            artifact "[organisation]/releases/download/v[revision]/[module]-[revision].jar"
-            m2compatible = true
-        }
-        metadataSources { artifact() }
-    }
+		url = "https://github.com/UselessSolutions"
+		patternLayout {
+			artifact "[organisation]/releases/download/v[revision]/[module]-[revision].jar"
+			m2compatible = true
+		}
+		metadataSources { artifact() }
+	}
 }
 
 dependencies {
@@ -25,5 +25,5 @@ dependencies {
 ```
 And add this to your `gradle.properties`
 ```groovy
-prismatic_version=3.0.2-7.1
+prismatic_version=3.0.3-7.1
 ```
